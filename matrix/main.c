@@ -33,7 +33,7 @@ int main(int argc, char** argv)
     start = wtime();
     matrixMultiplicationThread (a, b, c, len);
     stop = wtime();
-    printMatrix (a, b, c, len);
+    // printMatrix (a, b, c, len);
     
     printf("processing time: %fs\n", stop - start);
 
@@ -42,7 +42,7 @@ int main(int argc, char** argv)
     matrixMultiplicationHWThread (a, b, c, len, num_thread);
     stop = wtime();
 
-    printMatrix (a, b, c, len);
+    // printMatrix (a, b, c, len);
     
     printf("processing time: %fs\n", stop - start);
 

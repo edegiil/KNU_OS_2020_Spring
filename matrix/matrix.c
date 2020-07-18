@@ -79,14 +79,12 @@ void matrixSubtraction (int** a, int** b, int** c, int len)
 
 void matrixMultiplication (int** a, int** b, int **c, int len)
 {
-    int result = 0;
-    for (int i = 0; i < len; i++) {
-        for (int j = 0; j < len; j++) {
+    for (int i = 0; i < len; i++) {  // row
+        for (int j = 0; j < len; j++) {  // column
             c[i][j] = 0;
-            for (int k = 0; k < len; k++) {
-                result += a[i][k] * b[k][j];
+            for (int k = 0; k < len; k++) { 
+                c[i][j] += a[i][k] * b[k][j];
             }
-            c[i][j] = result;
         }
     }
 }
@@ -99,15 +97,12 @@ void *matrixMultiplicationThreadKernel(void *p_arg)
     int** b = arg->b;
     int** c = arg->c;
     int len = arg->len;
-    int result;
 
-    printf("Thread %d started\n", i);
     for (int j = 0; j < len; j++) {
         c[i][j] = 0;
         for (int k = 0; k < len; k++) {
-            result += a[i][k] * b[k][j];
+            c[i][j] += a[i][k] * b[k][j];
         }
-        c[i][j] = result;
     }
 }
 
@@ -128,7 +123,6 @@ void matrixMultiplicationThread (int** a, int** b, int **c, int len)
         arg->c = c;
         arg->len = len;
 
-        printf("Thread %d called\n", i);
         res = pthread_create(a_thread+i, NULL, matrixMultiplicationThreadKernel, (void*)arg);
         if (res) {
             perror("Thread creation failed");
@@ -154,15 +148,13 @@ void *matrixMultiplicationHWThreadKernel(void *p_arg)
     int** c = arg->c;
     int len = arg->len;
     int core = arg->core;
-    int result;
 
     for (int l = i; l < len; l += core) {
         for (int j = 0; j < len; j++) {
             c[l][j] = 0;
             for (int k = 0; k < len; k++) {
-                result += a[l][k] * b[k][j];
+                c[l][j] += a[l][k] * b[k][j];
             }
-            c[l][j] = result;
         }
     }
 }
